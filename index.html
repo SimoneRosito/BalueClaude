@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balue — Saúde programável para empresas modernas</title>
+  <meta name="description" content="Créditos de fisioterapia programáveis para empresas. Sem plano caro, sem burocracia, sem reembolso. O fisioterapeuta recebe antecipado." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark: #085041;
+      --green-mid: #0F6E56;
+      --green-light: #1D9E75;
+      --green-pale: #E1F5EE;
+      --green-text: #04342C;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #ffffff;
+      --bg-subtle: #f9fafb;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: var(--green-mid);
+      letter-spacing: -0.3px;
+    }
+    .logo sup {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      vertical-align: super;
+      margin-left: 3px;
+    }
+    nav a {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 2rem;
+    }
+    nav a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--green-mid);
+      color: #fff !important;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .nav-cta:hover { background: var(--green-dark) !important; }
+
+    /* HERO */
+    .hero {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-pale);
+      color: var(--green-mid);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 1.75rem;
+    }
+    .badge::before { content: "●"; font-size: 8px; }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 52px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--green-mid);
+    }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.65;
+    }
+    .cta-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--green-mid);
+      color: #fff;
+      border: none;
+      padding: 13px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--green-dark); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 13px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-ghost:hover { border-color: #9ca3af; background: var(--bg-subtle); }
+
+    /* STATS BAR */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-subtle);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+    .stat {
+      padding: 1.5rem 2.5rem;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--green-mid);
+      display: block;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* SECTIONS */
+    section {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .section-tag {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--green-mid);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(26px, 3vw, 34px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.75rem;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.65;
+    }
+
+    /* PROBLEM CARDS */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+    .problem-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .problem-card .icon {
+      width: 36px;
+      height: 36px;
+      background: var(--green-pale);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 18px;
+    }
+    .problem-card h3 {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .problem-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .problem-card ul li {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 3px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+    .problem-card ul li::before {
+      content: "·";
+      position: absolute;
+      left: 0;
+      color: var(--green-light);
+      font-weight: 700;
+    }
+
+    /* STEPS */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step-row {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .step-row:last-child { border-bottom: none; }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      color: var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-body h3 { font-size: 16px; font-weight: 500; margin-bottom: 5px; }
+    .step-body p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+
+    /* AUDIENCE TOGGLE */
+    .toggle-bar {
+      display: flex;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+    .toggle-btn {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .toggle-btn.active {
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+    .benefit-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      transition: border-color 0.15s;
+    }
+    .benefit-card:hover { border-color: var(--green-light); }
+    .benefit-icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+      color: var(--green-mid);
+    }
+    .benefit-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+    .benefit-card p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* DIVIDER */
+    hr { border: none; border-top: 1px solid var(--border); }
+
+    /* WAITLIST */
+    .waitlist-section {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+    .waitlist-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(26px, 3vw, 36px);
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+    .waitlist-section p {
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      margin-bottom: 2rem;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .waitlist-form {
+      max-width: 420px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .waitlist-form input,
+    .waitlist-form select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .waitlist-form input::placeholder { color: rgba(255,255,255,0.5); }
+    .waitlist-form select option { color: var(--text); background: #fff; }
+    .waitlist-form input:focus,
+    .waitlist-form select:focus {
+      outline: none;
+      border-color: rgba(255,255,255,0.5);
+    }
+    .waitlist-form .btn-submit {
+      background: #fff;
+      color: var(--green-dark);
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .waitlist-form .btn-submit:hover { opacity: 0.9; }
+    .success-msg {
+      display: none;
+      color: var(--green-pale);
+      font-size: 15px;
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav a:not(.nav-cta) { display: none; }
+      .stat { padding: 1.25rem 1.5rem; }
+      .cta-group { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">balue<sup>beta</sup></div>
+  <div>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#para-quem">Para quem</a>
+    <a href="#waitlist" class="nav-cta">Entrar na lista</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="badge">Piloto em São Paulo</div>
+  <h1>Benefício de saúde <em>que funciona</em> para a empresa moderna</h1>
+  <p class="hero-sub">Créditos de fisioterapia programáveis para empresas. Sem plano caro, sem reembolso, sem burocracia. O fisioterapeuta recebe antecipado.</p>
+  <div class="cta-group">
+    <button class="btn-primary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Quero participar do piloto</button>
+    <button class="btn-ghost" onclick="document.getElementById('como-funciona').scrollIntoView({behavior:'smooth'})">Ver como funciona</button>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num">R$0</span>
+    <span class="stat-label">Taxa de adesão</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">-40%</span>
+    <span class="stat-label">vs. plano tradicional</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">100%</span>
+    <span class="stat-label">antecipado ao prestador</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">PJ ok</span>
+    <span class="stat-label">funciona para todos</span>
+  </div>
+</div>
+
+<section>
+  <div class="section-tag">O problema</div>
+  <h2>Saúde corporativa está quebrada</h2>
+  <p class="section-sub">Três partes perdendo ao mesmo tempo — e nenhuma solução atual resolve isso de verdade.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">🏢</div>
+      <h3>Empresas</h3>
+      <ul>
+        <li>Plano caro e inflexível</li>
+        <li>PJ e remoto sem cobertura</li>
+        <li>Benefício desperdiçado</li>
+        <li>Pouca visibilidade de uso</li>
+      </ul>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🩺</div>
+      <h3>Fisioterapeutas</h3>
+      <ul>
+        <li>Agenda ociosa</li>
+        <li>Receita imprevisível</li>
+        <li>Recebe só após atender</li>
+        <li>Dependência de convênios</li>
+      </ul>
+    </div>
+    <div class="problem-card">
+      <div class="icon">👤</div>
+      <h3>Funcionários</h3>
+      <ul>
+        <li>Sessão cara individualmente</li>
+        <li>Créditos que expiram</li>
+        <li>Reembolso burocrático</li>
+        <li>Pouca flexibilidade</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<section id="como-funciona">
+  <div class="section-tag">Como funciona</div>
+  <h2>Simples para todos os lados</h2>
+  <p class="section-sub">A Balue conecta empresas a fisioterapeutas com créditos digitais — sem a complexidade de um plano de saúde.</p>
+  <div class="steps">
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Empresa compra créditos</h3>
+        <p>Compra um pacote de sessões de fisioterapia com desconto e distribui para os funcionários. Funciona para CLT, PJ, remoto ou híbrido.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Fisioterapeuta recebe antecipado</h3>
+        <p>Ao vender a capacidade futura, o profissional já recebe — sem precisar esperar o atendimento acontecer.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Funcionário agenda pelo app</h3>
+        <p>Vê os créditos disponíveis, escolhe o horário e confirma. Simples como usar um ingresso digital. Sem reembolso, sem papelada.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>Crédito não usado? Transfere</h3>
+        <p>Se não precisar, pode transferir para um colega ou familiar dentro da plataforma. O crédito não se perde.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<section id="para-quem">
+  <div class="section-tag">Para quem é</div>
+  <h2>Ideal para você?</h2>
+  <p class="section-sub">A Balue foi desenhada para dois perfis com muito a ganhar nesse modelo.</p>
+  <div class="toggle-bar">
+    <button class="toggle-btn active" id="btn-empresa" onclick="switchAudience('empresa')">Para empresas</button>
+    <button class="toggle-btn" id="btn-fisio" onclick="switchAudience('fisio')">Para fisioterapeutas</button>
+  </div>
+  <div class="benefits-grid" id="benefits-grid">
+    <div class="benefit-card">
+      <div class="benefit-icon">💸</div>
+      <h3>Custo menor</h3>
+      <p>Paga pelo uso real, não por cobertura ampla que ninguém usa.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">⚡</div>
+      <h3>Sem reembolso</h3>
+      <p>Funcionário usa o crédito direto. Zero burocracia de reembolso.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🔧</div>
+      <h3>Flexível por design</h3>
+      <p>Funciona para CLT, PJ, remoto, híbrido. Qualquer formato de trabalho.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">📊</div>
+      <h3>Visibilidade de uso</h3>
+      <p>Dashboard com utilização agregada da equipe, sem dados médicos individuais.</p>
+    </div>
+  </div>
+</section>
+
+<div class="waitlist-section" id="waitlist">
+  <h2>Entre na lista de espera</h2>
+  <p>Estamos selecionando os primeiros parceiros em São Paulo. Seja um dos primeiros a experimentar.</p>
+  <form class="waitlist-form" onsubmit="handleSubmit(event)">
+    <input type="text" id="wl-name" placeholder="Seu nome" required />
+    <input type="email" id="wl-email" placeholder="Seu e-mail" required />
+    <select id="wl-role" required>
+      <option value="">Sou... (selecione)</option>
+      <option value="empresa">Empresa / RH</option>
+      <option value="fisio">Fisioterapeuta / Clínica</option>
+      <option value="outro">Outro</option>
+    </select>
+    <button type="submit" class="btn-submit">Quero participar do piloto →</button>
+  </form>
+  <div class="success-msg" id="success-msg">✓ Recebemos seu interesse! Entraremos em contato em breve.</div>
+</div>
+
+<footer>
+  <p>© 2025 Balue · São Paulo, Brasil · <a href="mailto:contato@balue.com.br">contato@balue.com.br</a></p>
+</footer>
+
+<script>
+  const empresaBenefits = [
+    { icon: '💸', title: 'Custo menor', desc: 'Paga pelo uso real, não por cobertura ampla que ninguém usa.' },
+    { icon: '⚡', title: 'Sem reembolso', desc: 'Funcionário usa o crédito direto. Zero burocracia de reembolso.' },
+    { icon: '🔧', title: 'Flexível por design', desc: 'Funciona para CLT, PJ, remoto, híbrido. Qualquer formato de trabalho.' },
+    { icon: '📊', title: 'Visibilidade de uso', desc: 'Dashboard com utilização agregada da equipe, sem dados médicos individuais.' },
+  ];
+  const fisioBenefits = [
+    { icon: '📅', title: 'Agenda preenchida', desc: 'Monetize horários ociosos que hoje viram receita perdida.' },
+    { icon: '💰', title: 'Receba antecipado', desc: 'O pagamento entra quando o crédito é vendido, não quando a sessão acontece.' },
+    { icon: '📈', title: 'Receita previsível', desc: 'Saiba com antecedência quantas sessões tem garantidas no mês.' },
+    { icon: '🤝', title: 'Sem convênio', desc: 'Acesso direto a empresas e funcionários sem intermediários tradicionais.' },
+  ];
+
+  function switchAudience(type) {
+    document.getElementById('btn-empresa').classList.toggle('active', type === 'empresa');
+    document.getElementById('btn-fisio').classList.toggle('active', type === 'fisio');
+    const data = type === 'empresa' ? empresaBenefits : fisioBenefits;
+    document.getElementById('benefits-grid').innerHTML = data.map(b => `
+      <div class="benefit-card">
+        <div class="benefit-icon">${b.icon}</div>
+        <h3>${b.title}</h3>
+        <p>${b.desc}</p>
+      </div>
+    `).join('');
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('wl-name').value.trim();
+    const email = document.getElementById('wl-email').value.trim();
+    const role = document.getElementById('wl-role').value;
+    if (!name || !email || !role) return;
+    document.querySelector('.waitlist-form').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+  }
+</script>
+</body>
+</html>
