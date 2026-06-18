@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balue — Sistema Operacional do Piloto</title>
+<style>
+  :root {
+    --purple-50: #EEEDFE;
+    --purple-200: #AFA9EC;
+    --purple-600: #534AB7;
+    --purple-800: #3C3489;
+    --purple-900: #26215C;
+    --teal-50: #E1F5EE;
+    --teal-400: #1D9E75;
+    --teal-600: #0F6E56;
+    --teal-800: #085041;
+    --amber-50: #FAEEDA;
+    --amber-400: #BA7517;
+    --amber-600: #854F0B;
+    --amber-800: #633806;
+    --blue-50: #E6F1FB;
+    --blue-400: #378ADD;
+    --blue-600: #185FA5;
+    --blue-800: #0C447C;
+    --gray-50: #F1EFE8;
+    --gray-100: #D3D1C7;
+    --gray-400: #888780;
+    --gray-600: #5F5E5A;
+    --gray-900: #2C2C2A;
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --border: #E8E6E0;
+    --text: #1A1A18;
+    --text-muted: #6B6963;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+  header { background: var(--purple-900); padding: 2.5rem 2rem 2rem; }
+  .header-inner { max-width: 780px; margin: 0 auto; }
+  .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+  .logo-mark { width: 34px; height: 34px; background: var(--purple-600); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .logo-mark svg { width: 18px; height: 18px; fill: white; }
+  .logo-name { font-size: 16px; font-weight: 600; color: white; letter-spacing: -0.3px; }
+  header h1 { font-size: 26px; font-weight: 600; color: white; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: .5rem; }
+  header p { font-size: 14px; color: #B8B4E0; }
+  .header-meta { display: flex; gap: 1.5rem; margin-top: 1.5rem; }
+  .meta-pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; font-size: 12px; color: #D0CCF0; }
+
+  nav { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 780px; margin: 0 auto; display: flex; gap: 0; overflow-x: auto; }
+  .nav-tab { padding: 14px 20px; font-size: 13px; font-weight: 500; color: var(--text-muted); border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; text-decoration: none; transition: color .15s, border-color .15s; }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--purple-800); border-bottom-color: var(--purple-600); }
+
+  main { max-width: 780px; margin: 0 auto; padding: 2rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-intro { font-size: 14px; color: var(--text-muted); margin-bottom: 1.75rem; line-height: 1.6; max-width: 600px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-head { font-size: 12px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
+
+  .metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
+  .metric-val { font-size: 26px; font-weight: 600; letter-spacing: -1px; color: var(--purple-800); }
+  .metric-lbl { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+  .tool-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .tool-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .tool-icon { width: 40px; height: 40px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .tool-body { flex: 1; }
+  .tool-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
+  .tool-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .tool-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--blue-600); text-decoration: none; margin-top: 5px; }
+  .tool-link:hover { text-decoration: underline; }
+
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 10px; }
+  .badge-purple { background: var(--purple-50); color: var(--purple-800); }
+  .badge-teal { background: var(--teal-50); color: var(--teal-800); }
+  .badge-amber { background: var(--amber-50); color: var(--amber-800); }
+  .badge-blue { background: var(--blue-50); color: var(--blue-800); }
+
+  /* Flow */
+  .flow { display: flex; flex-direction: column; }
+  .flow-step { display: flex; gap: 16px; }
+  .flow-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+  .flow-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: white; flex-shrink: 0; }
+  .flow-connector { width: 2px; background: var(--border); flex: 1; min-height: 20px; margin: 4px 0; }
+  .flow-body { padding-bottom: 1.75rem; flex: 1; padding-top: 6px; }
+  .flow-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .flow-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .flow-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .flow-tag { font-size: 11px; padding: 2px 9px; border-radius: 10px; border: 1px solid var(--border); color: var(--text-muted); }
+
+  /* Setup checklist */
+  .checklist { list-style: none; }
+  .checklist li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .check-icon.done { background: var(--teal-400); border-color: var(--teal-400); }
+  .check-icon.done::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+  .check-body { flex: 1; }
+  .check-title { font-size: 14px; font-weight: 500; }
+  .check-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.5; }
+
+  /* Messages */
+  .msg-block { margin-bottom: 1.5rem; }
+  .msg-label { font-size: 11px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .msg-body { background: var(--gray-50); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; font-size: 13px; line-height: 1.7; white-space: pre-wrap; color: var(--text); font-family: inherit; }
+  .copy-btn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--text-muted); transition: background .15s; }
+  .copy-btn:hover { background: var(--gray-50); }
+  .copy-btn.copied { color: var(--teal-600); border-color: var(--teal-400); }
+
+  /* Liquidação table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 9px 12px; font-size: 11px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+  td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.4; }
+  tr:last-child td { border-bottom: none; }
+  .td-day { font-weight: 600; color: var(--purple-800); white-space: nowrap; }
+
+  .info-box { background: var(--amber-50); border: 1px solid #FAC775; border-radius: var(--radius); padding: 1rem 1.1rem; font-size: 13px; color: var(--amber-800); line-height: 1.6; margin-top: 1rem; }
+  .info-box strong { font-weight: 600; }
+
+  .formula-box { background: var(--purple-50); border-radius: var(--radius); padding: 1.25rem; font-size: 13px; line-height: 2.1; color: var(--gray-900); }
+  .formula-box .line { display: flex; justify-content: space-between; padding: 0; }
+  .formula-box .line.total { border-top: 1px solid var(--purple-200); padding-top: 10px; margin-top: 4px; font-weight: 600; font-size: 15px; color: var(--purple-900); }
+  .formula-box .lbl { color: var(--text-muted); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1rem; }
+  .mini-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+  .mini-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--purple-600); margin-bottom: 6px; }
+  .mini-body { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+  footer { max-width: 780px; margin: 0 auto; padding: 1.5rem 2rem 3rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .footer-brand { font-size: 13px; font-weight: 600; color: var(--purple-800); }
+  .footer-note { font-size: 12px; color: var(--text-muted); }
+
+  @media (max-width: 600px) {
+    main { padding: 1.25rem; }
+    header { padding: 1.5rem 1.25rem; }
+    .metric-row { grid-template-columns: 1fr 1fr; }
+    .metric-row .metric:last-child { grid-column: 1 / -1; }
+    .two-col { grid-template-columns: 1fr; }
+    header h1 { font-size: 20px; }
+    .header-meta { flex-wrap: wrap; gap: .75rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="logo-name">Balue</span>
+    </div>
+    <h1>Sistema operacional do piloto</h1>
+    <p>Stack gratuita · Fluxo completo · Mensagens prontas · Liquidação</p>
+    <div class="header-meta">
+      <span class="meta-pill">Custo R$ 0/mês</span>
+      <span class="meta-pill">5 ferramentas integradas</span>
+      <span class="meta-pill">Setup em ~5 dias</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-tab active" onclick="showSection('visao', this)">Visão geral</a>
+    <a class="nav-tab" onclick="showSection('fluxo', this)">Fluxo completo</a>
+    <a class="nav-tab" onclick="showSection('setup', this)">Setup</a>
+    <a class="nav-tab" onclick="showSection('mensagens', this)">Mensagens</a>
+    <a class="nav-tab" onclick="showSection('liquidacao', this)">Liquidação</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- VISÃO GERAL -->
+<div class="section active" id="sec-visao">
+  <p class="section-intro">Stack 100% gratuita para operar o piloto do zero ao fechamento mensal. Cada ferramenta tem uma função única — sem sobreposição, sem custo.</p>
+
+  <div class="metric-row">
+    <div class="metric"><div class="metric-val">R$0</div><div class="metric-lbl">Custo mensal de infraestrutura</div></div>
+    <div class="metric"><div class="metric-val">5</div><div class="metric-lbl">Ferramentas integradas</div></div>
+    <div class="metric"><div class="metric-val">~2 min</div><div class="metric-lbl">Trabalho manual por sessão</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">Stack operacional</div>
+
+    <div class="tool-item">
+      <div class="tool-icon" style="background:#E1F5EE">📅</div>
+      <div class="tool-body">
+        <div class="tool-name">Calendly <span class="badge badge-teal">Agendamento</span></div>
+        <div class="tool-desc">Cada fisioterapeuta cria sua conta gratuita e configura horários. Colaboradores agendam diretamente pelo link. Balue recebe cópia de cada confirmação por e-mail — esse e-mail é o gatilho para debitar 1 crédito na planilha.</div>
+        <a href="https://calendly.com" target="_blank" class="tool-link">calendly.com ↗</a>
+      </div>
+    </div>
+
+    <div class="tool-item">
+      <div class="tool-icon" style="background:#E6F1FB">📊</div>
+      <div class="tool-body">
+        <div class="tool-name">Google Sheets <span class="badge badge-blue">Ledger de créditos</span></div>
+        <div class="tool-desc">Planilha Balue_Piloto_Controle com abas Colaboradores, Movimentações, Empresas, Fisioterapeutas e Liquidação. Compartilhada com o RH da empresa em modo somente leitura.</div>
+        <a href="https://sheets.google.com" target="_blank" class="tool-link">sheets.google.com ↗</a>
+      </div>
+    </div>
+
+    <div class="tool-item">
+      <div class="tool-icon" style="background:#FAEEDA">💬</div>
+      <div class="tool-body">
+        <div class="tool-name">WhatsApp Business <span class="badge badge-amber">Comunicação</span></div>
+        <div class="tool-desc">Número Balue exclusivo para confirmações, lembretes e suporte durante o piloto. Canal direto com colaboradores e fisioterapeutas.</div>
+        <a href="https://business.whatsapp.com" target="_blank" class="tool-link">business.whatsapp.com ↗</a>
+      </div>
+    </div>
+
+    <div class="tool-item">
+      <div class="tool-icon" style="background:#E1F5EE">📧</div>
+      <div class="tool-body">
+        <div class="tool-name">Brevo <span class="badge badge-teal">E-mail automático</span></div>
+        <div class="tool-desc">Welcome e-mail para colaboradores onboardados e relatório mensal para o RH. Plano gratuito: 300 e-mails/dia — suficiente para todo o piloto.</div>
+        <a href="https://brevo.com" target="_blank" class="tool-link">brevo.com ↗</a>
+      </div>
+    </div>
+
+    <div class="tool-item">
+      <div class="tool-icon" style="background:#EEEDFE">💸</div>
+      <div class="tool-body">
+        <div class="tool-name">PIX <span class="badge badge-purple">Liquidação</span></div>
+        <div class="tool-desc">Pagamento ao fisioterapeuta em até 5 dias após fechamento (dia 30). Comprovante registrado na aba Liquidação da planilha. Diferencial: mercado paga em 30–90 dias.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLUXO -->
+<div class="section" id="sec-fluxo">
+  <p class="section-intro">8 etapas do contrato à liquidação. O único trabalho manual diário é o débito do crédito na planilha quando o e-mail do Calendly chega.</p>
+
+  <div class="card">
+    <div class="flow">
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--purple-800)">1</div><div class="flow-connector"></div></div>
+        <div class="flow-body">
+          <div class="flow-title">Empresa fecha o pacote com Balue</div>
+          <div class="flow-desc">RH assina via WhatsApp/e-mail. Balue cria a empresa na planilha e recarga créditos no dia 1 de cada mês.</div>
+          <div class="flow-tags"><span class="flow-tag">WhatsApp</span><span class="flow-tag">Google Sheets</span></div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--purple-800)">2</div><div class="flow-connector"></div></div>
+        <div class="flow-body">
+          <div class="flow-title">Onboarding do colaborador</div>
+          <div class="flow-desc">Balue envia welcome e-mail via Brevo com saldo de créditos, lista de fisioterapeutas da rede e link para agendar.</div>
+          <div class="flow-tags"><span class="flow-tag">Brevo</span></div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--teal-600)">3</div><div class="flow-connector"></div></div>
+        <div class="flow-body">
+          <div class="flow-title">Colaborador escolhe fisioterapeuta</div>
+          <div class="flow-desc">Acessa a página da rede Balue (GitHub Pages) com lista de fisios por bairro, especialidade e link Calendly de cada um.</div>
+          <div class="flow-tags"><span class="flow-tag">GitHub Pages</span></div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--teal-600)">4</div><div class="flow-connector"></div></div>
+        <div class="flow-body">
+          <div class="flow-title">Colaborador agenda pelo Calendly do fisio</div>
+          <div class="flow-desc">Escolhe horário e preenche nome, e-mail e empresa. O fisio configurou o e-mail Balue como convidado fixo — a Balue recebe cópia automática de toda confirmação.</div>
+          <div class="flow-tags"><span class="flow-tag">Calendly (conta do fisio)</span><span class="flow-tag">Cópia automática Balue</span></div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--amber-600)">5</div><div class="flow-connector"></div></div>
+        <div class="flow-body">
+          <div class="flow-title">Balue debita o crédito</div>
+          <div class="flow-desc">Ao receber o e-mail de confirmação, Balue abre a planilha e registra: colaborador, fisioterapeuta, data, –1 crédito. Atualiza saldo na aba Colaboradores. ~2 minutos por sessão.</div>
+          <div class="flow-tags"><span class="flow-tag">Google Sheets</span><span class="flow-tag">~2 min manual</span></div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--amber-600)">6</div><div class="flow-connector"></div></div>
+        <div class="flow-body">
+          <div class="flow-title">Sessão acontece</div>
+          <div class="flow-desc">O fisioterapeuta atende. Calendly envia lembrete automático 24h antes para o colaborador. Nenhuma ação da Balue necessária aqui.</div>
+          <div class="flow-tags"><span class="flow-tag">Lembrete automático Calendly</span></div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--purple-800)">7</div><div class="flow-connector"></div></div>
+        <div class="flow-body">
+          <div class="flow-title">Fechamento dia 30 — relatório ao RH</div>
+          <div class="flow-desc">Balue envia via Brevo o relatório mensal com sessões realizadas por colaborador, créditos utilizados vs. contratados e saldo remanescente.</div>
+          <div class="flow-tags"><span class="flow-tag">Brevo</span><span class="flow-tag">Dados da planilha</span></div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot" style="background:var(--teal-600)">8</div></div>
+        <div class="flow-body">
+          <div class="flow-title">Liquidação ao fisioterapeuta — até dia 5</div>
+          <div class="flow-desc">Balue calcula sessões × valor acordado × (1 – taxa Balue). Transfere via PIX e registra comprovante na aba Liquidação da planilha.</div>
+          <div class="flow-tags"><span class="flow-tag">PIX</span><span class="flow-tag">Registro na planilha</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="section" id="sec-setup">
+  <p class="section-intro">Checklist de configuração inicial — feito uma vez só. Marque cada item conforme for concluindo.</p>
+
+  <div class="card">
+    <div class="card-head">Checklist de setup</div>
+    <ul class="checklist" id="checklist">
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Criar conta WhatsApp Business</div><div class="check-desc">Número exclusivo Balue para comunicação com colaboradores e fisioterapeutas durante o piloto.</div></div>
+      </li>
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Criar conta Brevo</div><div class="check-desc">Configurar template de welcome e-mail e relatório mensal. Plano gratuito suporta o piloto inteiro (300 e-mails/dia).</div></div>
+      </li>
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Subir planilha no Google Sheets</div><div class="check-desc">Importar Balue_Piloto_Controle.xlsx para o Google Sheets. Compartilhar com o RH da empresa em modo "somente visualização".</div></div>
+      </li>
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Onboarding Calendly de cada fisioterapeuta</div><div class="check-desc">Cada fisio cria conta gratuita e adiciona o e-mail Balue como convidado fixo em todos os eventos. Ver instruções abaixo.</div></div>
+      </li>
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Adicionar campo "Empresa" no Calendly</div><div class="check-desc">Pedir ao fisio para incluir campo obrigatório "Nome da empresa" no formulário de agendamento — permite identificar qual empresa cobrar.</div></div>
+      </li>
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Atualizar página da rede no GitHub Pages</div><div class="check-desc">Incluir lista de fisioterapeutas com nome, bairro, especialidade e link Calendly de cada um. URL: simonerosito.github.io/BalueClaude/</div></div>
+      </li>
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Configurar filtro no Gmail</div><div class="check-desc">Criar label "Agendamentos Calendly": filtrar e-mails de calendly.com para o endereço Balue. Facilita o acompanhamento diário.</div></div>
+      </li>
+      <li>
+        <div class="check-icon" onclick="toggleCheck(this)"></div>
+        <div class="check-body"><div class="check-title">Testar o fluxo ponta a ponta</div><div class="check-desc">Fazer um agendamento teste, confirmar que Balue recebe cópia, debitar crédito na planilha e simular liquidação.</div></div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-head">Como configurar o Calendly do fisioterapeuta — passo a passo</div>
+    <ol style="padding-left:1.2rem;font-size:13px;color:var(--text-muted);display:flex;flex-direction:column;gap:10px;line-height:1.5">
+      <li>Em <strong style="color:var(--text)">Account → Event Types</strong>, editar o tipo de evento (Consulta / Sessão)</li>
+      <li>Ir em <strong style="color:var(--text)">Notifications & Cancellation Policy</strong></li>
+      <li>Em "Additional emails", adicionar <strong style="color:var(--purple-800)">o e-mail operacional da Balue</strong></li>
+      <li>Marcar também "Include cancellation notifications"</li>
+      <li>Salvar — pronto. Balue recebe cópia automática de toda confirmação e cancelamento.</li>
+    </ol>
+  </div>
+
+  <div class="two-col">
+    <div class="mini-card">
+      <div class="mini-title">Cancelamento com +24h</div>
+      <div class="mini-body">Crédito devolvido ao colaborador. Registrar na planilha como "Cancelamento — crédito estornado".</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-title">No-show ou &lt;24h</div>
+      <div class="mini-body">Crédito consumido e sessão contada para o fisioterapeuta. Sem devolução — regra comunicada no onboarding.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MENSAGENS -->
+<div class="section" id="sec-mensagens">
+  <p class="section-intro">Textos prontos para copiar e enviar. Substitua os campos em [colchetes] antes de usar.</p>
+
+  <div class="msg-block">
+    <div class="msg-label">Welcome e-mail — colaborador (Brevo) <button class="copy-btn" onclick="copyText('m1', this)">Copiar</button></div>
+    <div class="msg-body" id="m1">Olá, [Nome]!
+
+Sua empresa ativou o benefício Balue de fisioterapia. Veja como usar:
+
+🗓 Agende diretamente com o fisioterapeuta de sua preferência:
+→ [link da página da rede]
+
+Seu saldo atual: [N] sessão(ões) disponíveis em [mês]
+Validade: até dia 30/[mês] — créditos não utilizados não acumulam.
+
+Em caso de dúvidas, fale com a Balue pelo WhatsApp: [número]
+
+Cuide-se!</div>
+  </div>
+
+  <div class="msg-block">
+    <div class="msg-label">Confirmação de agendamento — WhatsApp <button class="copy-btn" onclick="copyText('m2', this)">Copiar</button></div>
+    <div class="msg-body" id="m2">Olá, [Nome]! ✅
+
+Seu agendamento com [Fisioterapeuta] foi confirmado:
+📅 [Data] às [Horário]
+📍 [Endereço]
+
+Restam [N–1] crédito(s) no seu saldo deste mês.
+
+Qualquer dúvida, estamos aqui!
+— Balue</div>
+  </div>
+
+  <div class="msg-block">
+    <div class="msg-label">Relatório mensal — RH da empresa (Brevo) <button class="copy-btn" onclick="copyText('m3', this)">Copiar</button></div>
+    <div class="msg-body" id="m3">Olá, [Nome RH]!
+
+Segue o resumo Balue de [Mês/Ano] para [Empresa]:
+
+📊 Utilização do mês
+• Sessões realizadas: [N]
+• Colaboradores ativos: [N] de [Total]
+• Taxa de adesão: [X]%
+
+💳 Créditos
+• Contratados: [N]
+• Utilizados: [N]
+• Saldo remanescente: [N] (expiram em 30/[mês])
+
+Relatório completo na planilha:
+→ [link Google Sheets]
+
+— Equipe Balue</div>
+  </div>
+
+  <div class="msg-block">
+    <div class="msg-label">Onboarding fisioterapeuta — WhatsApp <button class="copy-btn" onclick="copyText('m4', this)">Copiar</button></div>
+    <div class="msg-body" id="m4">Olá, [Dr./Dra. Nome]! 👋
+
+Bem-vindo(a) à rede Balue.
+
+Para ativar sua agenda:
+
+1️⃣ Crie sua conta gratuita: calendly.com
+2️⃣ Configure seus horários disponíveis
+3️⃣ Em "Notifications", adicione este e-mail como convidado: [email Balue]
+4️⃣ Nos envie seu link Calendly para incluirmos na rede
+
+Pagamento: até o dia 5 do mês seguinte via PIX, após cada sessão realizada.
+
+Qualquer dúvida, fale comigo aqui!
+— Simone / Balue</div>
+  </div>
+</div>
+
+<!-- LIQUIDAÇÃO -->
+<div class="section" id="sec-liquidacao">
+  <p class="section-intro">Ciclo financeiro fixo: crédito entra no dia 1, fechamento no dia 30, PIX ao fisioterapeuta até o dia 5 do mês seguinte.</p>
+
+  <div class="card">
+    <div class="card-head">Ciclo mensal</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Data</th><th>Ação</th><th>Onde</th></tr></thead>
+        <tbody>
+          <tr><td class="td-day">Dia 1</td><td>Recarga de créditos para todos os colaboradores</td><td>Google Sheets — aba Movimentações</td></tr>
+          <tr><td class="td-day">Dia 1</td><td>Cobrança à empresa (PIX/transferência)</td><td>WhatsApp + e-mail</td></tr>
+          <tr><td class="td-day">Corrido</td><td>Débito de 1 crédito a cada confirmação Calendly</td><td>Google Sheets (~2 min manual)</td></tr>
+          <tr><td class="td-day">Dia 30</td><td>Fechamento: contagem de sessões por fisioterapeuta</td><td>Google Sheets — aba Liquidação</td></tr>
+          <tr><td class="td-day">Dia 30</td><td>Envio do relatório mensal ao RH</td><td>Brevo</td></tr>
+          <tr><td class="td-day">Até dia 5</td><td>Pagamento PIX a cada fisioterapeuta</td><td>App do banco + registro na planilha</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-head">Cálculo do repasse</div>
+    <div class="formula-box">
+      <div class="line"><span class="lbl">Sessões realizadas no mês</span><span>[N]</span></div>
+      <div class="line"><span class="lbl">Valor acordado por sessão</span><span>R$ [X]</span></div>
+      <div class="line"><span class="lbl">Valor bruto (N × R$X)</span><span>R$ [bruto]</span></div>
+      <div class="line"><span class="lbl">Taxa Balue (15%)</span><span>– R$ [taxa]</span></div>
+      <div class="line total"><span>PIX enviado ao fisioterapeuta</span><span>R$ [líquido]</span></div>
+    </div>
+    <div class="info-box"><strong>Diferencial de velocidade:</strong> o mercado paga fisioterapeutas em 30–90 dias via convênios. A Balue paga em até 5 dias via PIX. Use esse argumento no credenciamento de novos fisios.</div>
+  </div>
+
+  <div class="two-col">
+    <div class="mini-card">
+      <div class="mini-title">Crédito remanescente</div>
+      <div class="mini-body">Não acumula para o mês seguinte. Regra comunicada no onboarding — evita passivo e ativa utilização dentro do mês.</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-title">Valor por sessão</div>
+      <div class="mini-body">Acordado individualmente com cada fisioterapeuta e registrado na aba Fisioterapeutas da planilha antes do início.</div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <span class="footer-brand">Balue</span>
+  <span class="footer-note">Sistema operacional do piloto · uso interno</span>
+</footer>
+
+<script>
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  saveChecklist();
+}
+
+function saveChecklist() {
+  const items = document.querySelectorAll('.check-icon');
+  const state = Array.from(items).map(i => i.classList.contains('done'));
+  try { localStorage.setItem('balue_checklist', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadChecklist() {
+  try {
+    const state = JSON.parse(localStorage.getItem('balue_checklist') || '[]');
+    const items = document.querySelectorAll('.check-icon');
+    state.forEach((done, i) => { if (done && items[i]) items[i].classList.add('done'); });
+  } catch(e) {}
+}
+
+function copyText(id, btn) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copiado ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+loadChecklist();
+</script>
+</body>
+</html>
